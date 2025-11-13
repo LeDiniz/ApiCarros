@@ -79,6 +79,23 @@ app.delete('/rotaDel/:id', async (req, res) => {
     }
 });
 
+app.get('/rotaVer/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows] = await pool.query('SELECT nomeModelo FROM carros WHERE id = ?', [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ mensagem: 'Registro não encontrado' });
+        }
+
+        res.json(rows[0]);
+    }
+    catch (e) {
+        console.log("Erro", e);
+        res.status(500).json({ erro: 'Erro ao buscar registro' });
+    }
+});
+
 app.listen(3003, ()=>{
     console.log("O servidor tá ON")
 })
